@@ -1,0 +1,15 @@
+{
+  "name": "facebook-image-search",
+  "version": "1.0.0",
+  "description": "A JavaScript project to search for images in Facebook group galleries using a keyword.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "express": "^5.1.0"
+  }
+}
