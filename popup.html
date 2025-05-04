@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Facebook Group Search Helper</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Facebook Group Search Helper</h1>
+    
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <button id="searchTab" class="tab-button active">Search</button>
+        <button id="manageGroupsTab" class="tab-button">Manage Groups</button>
+      </div>
+      
+      <div id="searchContent" class="tab-content active">
+        <form id="searchForm">
+          <div class="form-group">
+            <label for="searchKeyword">Search Keyword:</label>
+            <input type="text" id="searchKeyword" placeholder="Enter search term (e.g., turtle)" required>
+          </div>
+          
+          <div class="form-group">
+            <label>Search Type:</label>
+            <div class="search-options">
+              <button type="button" class="search-option active" data-type="all">All Content</button>
+              <button type="button" class="search-option" data-type="photos">Photos</button>
+              <button type="button" class="search-option" data-type="videos">Videos</button>
+              <button type="button" class="search-option" data-type="albums">Albums</button>
+            </div>
+            <input type="hidden" id="searchType" value="all">
+          </div>
+          
+          <div class="button-container">
+            <button type="submit" class="primary-btn">Generate Search Links</button>
+            <button type="button" id="openAllBtn" class="secondary-btn">Open All in New Tabs</button>
+          </div>
+        </form>
+        
+        <div id="searchResults" class="results-container">
+          <!-- Search results will be dynamically inserted here -->
+        </div>
+      </div>
+      
+      <div id="manageGroupsContent" class="tab-content">
+        <div class="form-group">
+          <label for="groupInput">Add Facebook Group:</label>
+          <div class="input-with-button">
+            <input type="text" id="groupInput" placeholder="Enter Facebook group ID, name, or URL">
+            <button type="button" id="addGroupBtn" class="primary-btn">Add</button>
+          </div>
+          <div class="hint">Example: 123456789012345, mygroupname, or https://www.facebook.com/groups/mygroupname</div>
+        </div>
+        
+        <div class="form-group">
+          <label>My Saved Groups:</label>
+          <div id="savedGroups" class="saved-groups-container">
+            <!-- Saved groups will be dynamically inserted here -->
+          </div>
+        </div>
+        
+        <div class="button-container">
+          <button type="button" id="importBtn" class="secondary-btn">Import Groups</button>
+          <button type="button" id="exportBtn" class="secondary-btn">Export Groups</button>
+          <input type="file" id="importFile" accept=".csv,.txt" style="display: none;">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
