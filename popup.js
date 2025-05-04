@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Open all search links
   openAllBtn.addEventListener('click', function() {
-    const links = document.querySelectorAll('.group-links .group-link');
+    const links = document.querySelectorAll(`.group-links .group-link[data-type="${activeSearchType}"]`);
     
     if (links.length > 0) {
       if (links.length > 5) {
@@ -78,20 +78,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
       
-      // Open links for the active search type
-      let count = 0;
+      // Open all links with the current active search type using chrome.tabs API
       links.forEach(link => {
-        if (link.getAttribute('data-type') === activeSearchType) {
-          window.open(link.getAttribute('href'), '_blank');
-          count++;
-        }
+        const url = link.getAttribute('data-url');
+        chrome.tabs.create({ url: url });
       });
-      
-      if (count === 0) {
-        alert('No search links found for the selected search type.');
-      }
     } else {
-      alert('No search links found. Please generate links first.');
+      alert('No search links found for the selected search type.');
     }
   });
   
@@ -303,15 +296,26 @@ function createSearchLink(groupId, keyword, suffix, label, type) {
   let searchUrl;
   
   if (type === 'all') {
-    searchUrl = `https://www.facebook.com/groups/${groupId}/search/?q=${keyword}`;
+    searchUrl = `https://www.facebook.com/groups/${groupId}/search/?q=${keyword}%20photos`;
   } else if (type === 'photos' || type === 'videos') {
-    searchUrl = `https://www.facebook.com/groups/${groupId}${suffix}/?q=${keyword}`;
+    searchUrl = `https://www.facebook.com/groups/${groupId}${suffix}`;
   } else if (type === 'albums') {
-    searchUrl = `https://www.facebook.com/groups/${groupId}${suffix}/`;
+    searchUrl = `https://www.facebook.com/groups/${groupId}${suffix}`;
   }
   
-  link.href = searchUrl;
+  // Store URL as data attribute instead of href
+  link.setAttribute('data-url', searchUrl);
   link.textContent = label;
+  
+  // Use click handler to open in new tab without closing popup
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    chrome.tabs.create({ url: searchUrl });
+    return false;
+  });
+  
+  // Keep href for right-click "open in new tab" functionality
+  link.href = searchUrl;
   link.setAttribute('target', '_blank');
   
   return link;
