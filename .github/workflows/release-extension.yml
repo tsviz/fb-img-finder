@@ -79,13 +79,13 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          name: Release v${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
           files: |
             ${{ env.CHROME_ZIP_PATH }}
           body: |
-            # Facebook Group Search Helper v${{ github.ref_name }}
+            # Facebook Group Search Helper ${{ github.ref_name }}
             
             Browser extension for easily searching across multiple Facebook groups.
             
