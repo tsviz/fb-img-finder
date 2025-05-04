@@ -19,7 +19,7 @@
 Facebook Group Search Helper is a web application that helps users search across multiple Facebook groups simultaneously. It generates direct search links for each group, allowing you to quickly find content across groups you're a member of.
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Facebook+Group+Search+Helper" alt="Application Screenshot" width="80%"/>
+  <img src="./landing_page.png" alt="Application Screenshot" width="80%"/>
 </div>
 
 ---
