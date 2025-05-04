@@ -1,0 +1,102 @@
+name: Release Browser Extension
+
+on:
+  push:
+    tags:
+      - 'v*' # Run workflow when a new tag is pushed matching the pattern v*, like v1.0.0
+
+permissions:
+  contents: write  # Explicitly grant permission to create releases
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        
+      - name: Update version in manifest.json
+        run: |
+          if [ -f "manifest.json" ]; then
+            # Update version in manifest.json to match tag
+            jq ".version = \"$VERSION\"" manifest.json > manifest.json.tmp
+            mv manifest.json.tmp manifest.json
+          else
+            echo "manifest.json not found - skipping version update"
+            exit 1
+          fi
+        
+      - name: Validate extension
+        run: |
+          # Add basic validation - check if required files exist
+          if [ ! -f "manifest.json" ] || [ ! -f "popup.js" ] || [ ! -f "popup.html" ]; then
+            echo "Missing required extension files!"
+            exit 1
+          fi
+          echo "Basic validation passed"
+        
+      - name: Package extension
+        id: package_extension
+        run: |
+          # Create a zip file of the extension for Chrome/Edge
+          mkdir -p dist
+          zip_file="facebook-group-search-helper-v$VERSION.zip"
+          zip -r "dist/$zip_file" . -x "*.git*" -x "dist/*" -x "node_modules/*" -x "uploads/*" -x ".github/*" -x "*.zip" -x "*.DS_Store"
+          echo "CHROME_ZIP_PATH=dist/$zip_file" >> $GITHUB_ENV
+          
+          # List package contents for verification
+          echo "Package contents:"
+          unzip -l "dist/$zip_file"
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Auto-generate release notes with recent commits
+          if [ -z "$PREV_TAG" ]; then
+            # If this is the first tag, get all commits
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges -n 10)
+          else
+            # Get commits since previous tag
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges $PREV_TAG..HEAD)
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release v${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            ${{ env.CHROME_ZIP_PATH }}
+          body: |
+            # Facebook Group Search Helper v${{ github.ref_name }}
+            
+            Browser extension for easily searching across multiple Facebook groups.
+            
+            ## Installation Instructions
+            
+            ### Chrome/Edge:
+            1. Download the ZIP file
+            2. Unzip the file
+            3. Go to chrome://extensions or edge://extensions
+            4. Enable Developer Mode
+            5. Click "Load Unpacked" and select the unzipped folder
+
+            ## Changelog
+            ${{ env.CHANGELOG }}

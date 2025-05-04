@@ -16,10 +16,10 @@
 
 ## 📋 Overview
 
-Facebook Group Search Helper is a web application that helps users search across multiple Facebook groups simultaneously. It generates direct search links for each group, allowing you to quickly find content across groups you're a member of.
+Facebook Group Search Helper is available as both a web application and a browser extension that helps users search across multiple Facebook groups simultaneously. It generates direct search links for each group, allowing you to quickly find content across groups you're a member of.
 
 <div align="center">
-  <img src="./landing_page.png" alt="Application Screenshot" width="80%"/>
+  <img src="./landing_page.png" alt="Web Application Screenshot" width="80%"/>
 </div>
 
 ---
@@ -32,6 +32,33 @@ Facebook Group Search Helper is a web application that helps users search across
 - 🔄 **Bulk Open** - Open all search links in new tabs with one click
 - 🖼️ **Media Search** - Easily find photos, videos and albums in any group
 - 💯 **No Authentication Required** - No need to share credentials, works with direct Facebook URLs
+- 🧩 **Browser Extension** - Convenient access from your browser toolbar
+
+---
+
+## 🧩 Browser Extension
+
+### Features
+
+- Access the search helper directly from your browser toolbar
+- Save your frequently searched Facebook groups
+- Switch between different search types (All Content, Photos, Videos, Albums)
+- Import and export your group list
+- One-click to open all search results in new tabs
+
+<div align="center">
+  <img src="./popup.png" alt="Browser Extension Screenshot" width="60%"/>
+</div>
+
+### Installation
+
+1. **Chrome/Edge**:
+   - Download the extension from the Chrome Web Store
+   - Or load it as an unpacked extension in developer mode
+
+2. **Firefox**:
+   - Download the add-on from Firefox Add-ons
+   - Or load it temporarily as a developer extension
 
 ---
 
